@@ -50,11 +50,15 @@ def reconstruction(net, cuda, calib_tensor,
     coords, mat = create_grid(resolution, resolution, resolution)
                               #b_min, b_max, transform=transform)
 
+    print("=====1.1=====")
     calib = calib_tensor[0].cpu().numpy()
+    print("=====1.2=====")
 
     calib_inv = inv(calib)
     coords = coords.reshape(3,-1).T
+    print("=====1.3=====")
     coords = np.matmul(np.concatenate([coords, np.ones((coords.shape[0],1))], 1), calib_inv.T)[:, :3]
+    print("=====1.4=====")
     coords = coords.T.reshape(3,resolution,resolution,resolution)
     print("=====2=====")
 
