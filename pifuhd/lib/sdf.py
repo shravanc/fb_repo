@@ -34,6 +34,7 @@ def create_grid(resX, resY, resZ, b_min=np.array([-1, -1, -1]), b_max=np.array([
     :param b_max: vec3 (x_max, y_max, z_max) bounding box corner
     :return: [3, resX, resY, resZ] coordinates of the grid, and transform matrix from mesh index
     '''
+    print("+++1+++")
     coords = np.mgrid[:resX, :resY, :resZ]
     coords = coords.reshape(3, -1)
     coords_matrix = np.eye(4)
@@ -43,10 +44,13 @@ def create_grid(resX, resY, resZ, b_min=np.array([-1, -1, -1]), b_max=np.array([
     coords_matrix[2, 2] = length[2] / resZ
     coords_matrix[0:3, 3] = b_min
     coords = np.matmul(coords_matrix[:3, :3], coords) + coords_matrix[:3, 3:4]
+    print("+++2+++")
     if transform is not None:
         coords = np.matmul(transform[:3, :3], coords) + transform[:3, 3:4]
         coords_matrix = np.matmul(transform, coords_matrix)
+    print("+++3+++")
     coords = coords.reshape(3, resX, resY, resZ)
+    print("+++4+++")
     return coords, coords_matrix
 
 
