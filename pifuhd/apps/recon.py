@@ -207,8 +207,10 @@ def recon(opt, use_rect=False):
             if True:
                 print("----4----")
                 test_data = test_dataset[i]
+                print("----4.5----")
 
                 save_path = '%s/%s/recon/result_%s_%d.obj' % (opt.results_path, opt.name, test_data['name'], opt.resolution)
+                print("----4.55----")
 
                 print(save_path)
                 gen_mesh(opt.resolution, netMR, cuda, test_data, save_path, components=opt.use_compose)
