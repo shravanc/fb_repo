@@ -18,8 +18,8 @@ import cv2
 import os
 import argparse
 
-width = 512
-height = 512
+width = 256 #512
+height = 256 #512
 
 def make_rotate(rx, ry, rz):
     
