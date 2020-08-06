@@ -192,23 +192,29 @@ def recon(opt, use_rect=False):
         end_id = len(test_dataset)
 
     ## test
+    print("----1----")
     with torch.no_grad():
         set_eval()
+        print("----2----")
 
         print('generate mesh (test) ...')
         for i in tqdm(range(start_id, end_id)):
             if i >= len(test_dataset):
                 break
+            print("----3----")
             
             # for multi-person processing, set it to False
             if True:
+                print("----4----")
                 test_data = test_dataset[i]
 
                 save_path = '%s/%s/recon/result_%s_%d.obj' % (opt.results_path, opt.name, test_data['name'], opt.resolution)
 
                 print(save_path)
                 gen_mesh(opt.resolution, netMR, cuda, test_data, save_path, components=opt.use_compose)
+                print("----5----")
             else:
+                print("----6----")
                 for j in range(test_dataset.get_n_person(i)):
                     test_dataset.person_id = j
                     test_data = test_dataset[i]
