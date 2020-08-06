@@ -251,10 +251,10 @@ class EvalWPoseDataset(Dataset):
         trans_mat[1, 3] = scale*(rect[1] + rect[3]//2 - h//2) * scale_im2ndc
         
         intrinsic = np.matmul(trans_mat, intrinsic)
-        im_512 = cv2.resize(im, (512, 512))
+        im_256 = cv2.resize(im, (256, 256))
         im = cv2.resize(im, (self.load_size, self.load_size))
 
-        image_512 = Image.fromarray(im_512[:,:,::-1]).convert('RGB')
+        image_256 = Image.fromarray(im_256[:,:,::-1]).convert('RGB')
         image = Image.fromarray(im[:,:,::-1]).convert('RGB')
         
         B_MIN = np.array([-1, -1, -1])
@@ -266,12 +266,12 @@ class EvalWPoseDataset(Dataset):
         calib_world = torch.Tensor(intrinsic).float()
 
         # image
-        image_512 = self.to_tensor(image_512)
+        image_256 = self.to_tensor(image_256)
         image = self.to_tensor(image)
         return {
             'name': img_name,
             'img': image.unsqueeze(0),
-            'img_512': image_512.unsqueeze(0),
+            'img_256': image_256.unsqueeze(0),
             'calib': calib.unsqueeze(0),
             'calib_world': calib_world.unsqueeze(0),
             'b_min': B_MIN,

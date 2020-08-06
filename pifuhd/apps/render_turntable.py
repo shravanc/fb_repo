@@ -18,8 +18,8 @@ import cv2
 import os
 import argparse
 
-width = 256 #512
-height = 256 #512
+width = 256
+height = 256
 
 def make_rotate(rx, ry, rz):
     
@@ -57,8 +57,8 @@ def make_rotate(rx, ry, rz):
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-f', '--file_dir', type=str, required=True)
-parser.add_argument('-ww', '--width', type=int, default=512)
-parser.add_argument('-hh', '--height', type=int, default=512)
+parser.add_argument('-ww', '--width', type=int, default=256)
+parser.add_argument('-hh', '--height', type=int, default=256)
 parser.add_argument('-g', '--geo_render', action='store_true', help='default is normal rendering')
 
 args = parser.parse_args()

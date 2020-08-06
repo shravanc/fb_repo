@@ -54,7 +54,7 @@ def create_grid(resX, resY, resZ, b_min=np.array([-1, -1, -1]), b_max=np.array([
     return coords, coords_matrix
 
 
-def batch_eval(points, eval_func, num_samples=512 * 512 * 512):
+def batch_eval(points, eval_func, num_samples=256 * 256 * 256):
     num_pts = points.shape[1]
     sdf = np.zeros(num_pts)
 
@@ -67,7 +67,7 @@ def batch_eval(points, eval_func, num_samples=512 * 512 * 512):
 
     return sdf
 
-def batch_eval_tensor(points, eval_func, num_samples=512 * 512 * 512):
+def batch_eval_tensor(points, eval_func, num_samples=256 * 256 * 256):
     num_pts = points.size(1)
 
     num_batches = num_pts // num_samples
@@ -79,7 +79,7 @@ def batch_eval_tensor(points, eval_func, num_samples=512 * 512 * 512):
 
     return np.concatenate(vals,0)
 
-def eval_grid(coords, eval_func, num_samples=512 * 512 * 512):
+def eval_grid(coords, eval_func, num_samples=256 * 256 * 256):
     resolution = coords.shape[1:4]
     coords = coords.reshape([3, -1])
     sdf = batch_eval(coords, eval_func, num_samples=num_samples)
@@ -89,7 +89,7 @@ def eval_grid(coords, eval_func, num_samples=512 * 512 * 512):
 import time
 def eval_grid_octree(coords, eval_func,
                      init_resolution=64, threshold=0.05,
-                     num_samples=512 * 512 * 512):
+                     num_samples=256 * 256 * 256):
     resolution = coords.shape[1:4]
 
     sdf = np.zeros(resolution)

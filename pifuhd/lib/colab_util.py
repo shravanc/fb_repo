@@ -62,7 +62,7 @@ def set_renderer():
     cameras = OpenGLOrthographicCameras(device=device, R=R, T=T)
 
     raster_settings = RasterizationSettings(
-        image_size=512, 
+        image_size=256, 
         blur_radius=0.0, 
         faces_per_pixel=1, 
         bin_size = None, 
@@ -99,7 +99,7 @@ def get_verts_rgb_colors(obj_path):
 def generate_video_from_obj(obj_path, image_path, video_path, renderer):
     input_image = cv2.imread(image_path)
     input_image = input_image[:,:input_image.shape[1]//3]
-    input_image = cv2.resize(input_image, (512,512))
+    input_image = cv2.resize(input_image, (256,256))
 
     # Setup
     device = torch.device("cuda:0")
@@ -122,7 +122,7 @@ def generate_video_from_obj(obj_path, image_path, video_path, renderer):
 
     # create VideoWriter
     fourcc = cv2. VideoWriter_fourcc(*'MP4V')
-    out = cv2.VideoWriter(video_path, fourcc, 20.0, (1024,512))
+    out = cv2.VideoWriter(video_path, fourcc, 20.0, (1024,256))
 
     for i in tqdm(range(90)):
         R, T = look_at_view_transform(1.8, 0, i*4, device=device)

@@ -15,7 +15,7 @@ class BaseOptions():
         g_data.add_argument('--dataroot', type=str, default='./data',
                             help='path to images (data folder)')
 
-        g_data.add_argument('--loadSize', type=int, default=512, help='load size of input image')
+        g_data.add_argument('--loadSize', type=int, default=256, help='load size of input image')
 
         # Experiment related
         g_exp = parser.add_argument_group('Experiment')
@@ -46,7 +46,7 @@ class BaseOptions():
 
         # Testing related
         g_test = parser.add_argument_group('Testing')
-        g_test.add_argument('--resolution', type=int, default=512, help='# of grid in mesh reconstruction')
+        g_test.add_argument('--resolution', type=int, default=256, help='# of grid in mesh reconstruction')
         g_test.add_argument('--no_numel_eval', action='store_true', help='no numerical evaluation')
         g_test.add_argument('--no_mesh_recon', action='store_true', help='no mesh reconstruction')
 
@@ -86,13 +86,13 @@ class BaseOptions():
         g_model.add_argument('--num_stack', type=int, default=4, help='# of hourglass')
         g_model.add_argument('--hg_depth', type=int, default=2, help='# of stacked layer of hourglass')
         g_model.add_argument('--hg_down', type=str, default='ave_pool', help='ave pool || conv64 || conv128')
-        g_model.add_argument('--hg_dim', type=int, default=256, help='256 | 512')
+        g_model.add_argument('--hg_dim', type=int, default=256, help='256 | 256')
 
         # Classification General
         g_model.add_argument('--mlp_norm', type=str, default='group', help='normalization for volume branch')
-        g_model.add_argument('--mlp_dim', nargs='+', default=[257, 1024, 512, 256, 128, 1], type=int,
+        g_model.add_argument('--mlp_dim', nargs='+', default=[257, 1024, 256, 256, 128, 1], type=int,
                              help='# of dimensions of mlp. no need to put the first channel')
-        g_model.add_argument('--mlp_dim_color', nargs='+', default=[1024, 512, 256, 128, 3], type=int,
+        g_model.add_argument('--mlp_dim_color', nargs='+', default=[1024, 256, 256, 128, 3], type=int,
                              help='# of dimensions of mlp. no need to put the first channel')
         g_model.add_argument('--mlp_res_layers', nargs='+', default=[2,3,4], type=int,
                              help='leyers that has skip connection. use 0 for no residual pass')
@@ -141,7 +141,7 @@ class BaseOptions():
         # for multi resolution
         parser.add_argument('--load_netMR_checkpoint_path', type=str, help='path to save checkpoints')
         parser.add_argument('--loadSizeBig', type=int, default=1024, help='load size of input image')
-        parser.add_argument('--loadSizeLocal', type=int, default=512, help='load size of input image')
+        parser.add_argument('--loadSizeLocal', type=int, default=256, help='load size of input image')
         parser.add_argument('--train_full_pifu', action='store_true', help='enable end-to-end training')
         parser.add_argument('--num_local', type=int, default=1, help='number of local cropping')
 

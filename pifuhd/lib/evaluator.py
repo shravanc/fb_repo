@@ -37,7 +37,7 @@ class MeshEvaluator:
     @staticmethod
     def init_gl():
         from .render.gl.normal_render import NormalRender
-        MeshEvaluator._normal_render = NormalRender(width=512, height=512)
+        MeshEvaluator._normal_render = NormalRender(width=256, height=256)
 
     def __init__(self):
         pass
