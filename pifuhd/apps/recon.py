@@ -70,6 +70,7 @@ def gen_mesh(res, net, cuda, data, save_path, thresh=0.5, use_octree=True, compo
 
     verts, faces, _, _ = reconstruction(
         net, cuda, calib_tensor, res, b_min, b_max, thresh, use_octree=use_octree, num_samples=50000)
+    print("****10.1****")
     verts_tensor = torch.from_numpy(verts.T).unsqueeze(0).to(device=cuda).float()
     print("****11****")
     # if 'calib_world' in data:

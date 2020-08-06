@@ -46,6 +46,7 @@ def reconstruction(net, cuda, calib_tensor,
     '''
     # First we create a grid by resolution
     # and transforming matrix for grid coordinates to real world xyz
+    print("=====1=====")
     coords, mat = create_grid(resolution, resolution, resolution)
                               #b_min, b_max, transform=transform)
 
@@ -55,30 +56,37 @@ def reconstruction(net, cuda, calib_tensor,
     coords = coords.reshape(3,-1).T
     coords = np.matmul(np.concatenate([coords, np.ones((coords.shape[0],1))], 1), calib_inv.T)[:, :3]
     coords = coords.T.reshape(3,resolution,resolution,resolution)
+    print("=====2=====")
 
     # Then we define the lambda function for cell evaluation
     def eval_func(points):
+        print("=====3=====")
         points = np.expand_dims(points, axis=0)
         points = np.repeat(points, 1, axis=0)
         samples = torch.from_numpy(points).to(device=cuda).float()
         
         net.query(samples, calib_tensor)
         pred = net.get_preds()[0][0]
+        print("=====4=====")
         return pred.detach().cpu().numpy()
 
     # Then we evaluate the grid
+    print("=====5=====")
     if use_octree:
         sdf = eval_grid_octree(coords, eval_func, num_samples=num_samples)
     else:
         sdf = eval_grid(coords, eval_func, num_samples=num_samples)
+    print("=====6=====")
 
     # Finally we do marching cubes
     try:
+        print("=====7=====")
         verts, faces, normals, values = measure.marching_cubes_lewiner(sdf, thresh)
         # transform verts into world coordinate system
         trans_mat = np.matmul(calib_inv, mat)
         verts = np.matmul(trans_mat[:3, :3], verts.T) + trans_mat[:3, 3:4]
         verts = verts.T
+        print("=====8=====")
         # in case mesh has flip transformation
         if np.linalg.det(trans_mat[:3, :3]) < 0.0:
             faces = faces[:,::-1]
