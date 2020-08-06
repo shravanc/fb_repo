@@ -48,37 +48,38 @@ def gen_mesh(res, net, cuda, data, save_path, thresh=0.5, use_octree=True, compo
     
     b_min = data['b_min']
     b_max = data['b_max']
-    try:
-        save_img_path = save_path[:-4] + '.png'
-        save_img_list = []
-        for v in range(image_tensor_global.shape[0]):
-            save_img = (np.transpose(image_tensor_global[v].detach().cpu().numpy(), (1, 2, 0)) * 0.5 + 0.5)[:, :, ::-1] * 255.0
-            save_img_list.append(save_img)
-        save_img = np.concatenate(save_img_list, axis=1)
-        cv2.imwrite(save_img_path, save_img)
+    #try:
 
-        verts, faces, _, _ = reconstruction(
-            net, cuda, calib_tensor, res, b_min, b_max, thresh, use_octree=use_octree, num_samples=50000)
-        verts_tensor = torch.from_numpy(verts.T).unsqueeze(0).to(device=cuda).float()
-        # if 'calib_world' in data:
-        #     calib_world = data['calib_world'].numpy()[0]
-        #     verts = np.matmul(np.concatenate([verts, np.ones_like(verts[:,:1])],1), inv(calib_world).T)[:,:3]
+    save_img_path = save_path[:-4] + '.png'
+    save_img_list = []
+    for v in range(image_tensor_global.shape[0]):
+        save_img = (np.transpose(image_tensor_global[v].detach().cpu().numpy(), (1, 2, 0)) * 0.5 + 0.5)[:, :, ::-1] * 255.0
+        save_img_list.append(save_img)
+    save_img = np.concatenate(save_img_list, axis=1)
+    cv2.imwrite(save_img_path, save_img)
 
-        color = np.zeros(verts.shape)
-        interval = 50000
-        for i in range(len(color) // interval + 1):
-            left = i * interval
-            if i == len(color) // interval:
-                right = -1
-            else:
-                right = (i + 1) * interval
-            net.calc_normal(verts_tensor[:, None, :, left:right], calib_tensor[:,None], calib_tensor)
-            nml = net.nmls.detach().cpu().numpy()[0] * 0.5 + 0.5
-            color[left:right] = nml.T
+    verts, faces, _, _ = reconstruction(
+        net, cuda, calib_tensor, res, b_min, b_max, thresh, use_octree=use_octree, num_samples=50000)
+    verts_tensor = torch.from_numpy(verts.T).unsqueeze(0).to(device=cuda).float()
+    # if 'calib_world' in data:
+    #     calib_world = data['calib_world'].numpy()[0]
+    #     verts = np.matmul(np.concatenate([verts, np.ones_like(verts[:,:1])],1), inv(calib_world).T)[:,:3]
 
-        save_obj_mesh_with_color(save_path, verts, faces, color)
-    except Exception as e:
-        print(e)
+    color = np.zeros(verts.shape)
+    interval = 50000
+    for i in range(len(color) // interval + 1):
+        left = i * interval
+        if i == len(color) // interval:
+            right = -1
+        else:
+            right = (i + 1) * interval
+        net.calc_normal(verts_tensor[:, None, :, left:right], calib_tensor[:,None], calib_tensor)
+        nml = net.nmls.detach().cpu().numpy()[0] * 0.5 + 0.5
+        color[left:right] = nml.T
+
+    save_obj_mesh_with_color(save_path, verts, faces, color)
+    #except Exception as e:
+    #    print(e)
 
 
 def gen_mesh_imgColor(res, net, cuda, data, save_path, thresh=0.5, use_octree=True, components=False):
