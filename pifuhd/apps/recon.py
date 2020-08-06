@@ -31,18 +31,24 @@ from PIL import Image
 parser = BaseOptions()
 
 def gen_mesh(res, net, cuda, data, save_path, thresh=0.5, use_octree=True, components=False):
+    print("****1****")
     image_tensor_global = data['img_512'].to(device=cuda)
     image_tensor = data['img'].to(device=cuda)
     calib_tensor = data['calib'].to(device=cuda)
 
     net.filter_global(image_tensor_global)
     net.filter_local(image_tensor[:,None])
+    print("****2****")
 
     try:
         if net.netG.netF is not None:
+            print("****3****")
             image_tensor_global = torch.cat([image_tensor_global, net.netG.nmlF], 0)
+            print("****4****")
         if net.netG.netB is not None:
+            print("****5****")
             image_tensor_global = torch.cat([image_tensor_global, net.netG.nmlB], 0)
+            print("****6****")
     except:
         pass
     
@@ -213,7 +219,7 @@ def recon(opt, use_rect=False):
                 save_path = '%s/%s/recon/result_%s_%d.obj' % (opt.results_path, opt.name, test_data['name'], opt.resolution)
                 print("----4.55----")
 
-                print(save_path)
+                print("----->",save_path)
                 gen_mesh(opt.resolution, netMR, cuda, test_data, save_path, components=opt.use_compose)
                 print("----5----")
             else:
