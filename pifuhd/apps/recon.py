@@ -58,15 +58,20 @@ def gen_mesh(res, net, cuda, data, save_path, thresh=0.5, use_octree=True, compo
 
     save_img_path = save_path[:-4] + '.png'
     save_img_list = []
+    print("****7****")
     for v in range(image_tensor_global.shape[0]):
         save_img = (np.transpose(image_tensor_global[v].detach().cpu().numpy(), (1, 2, 0)) * 0.5 + 0.5)[:, :, ::-1] * 255.0
         save_img_list.append(save_img)
+    print("****8****")
     save_img = np.concatenate(save_img_list, axis=1)
+    print("****9****")
     cv2.imwrite(save_img_path, save_img)
+    print("****10****")
 
     verts, faces, _, _ = reconstruction(
         net, cuda, calib_tensor, res, b_min, b_max, thresh, use_octree=use_octree, num_samples=50000)
     verts_tensor = torch.from_numpy(verts.T).unsqueeze(0).to(device=cuda).float()
+    print("****11****")
     # if 'calib_world' in data:
     #     calib_world = data['calib_world'].numpy()[0]
     #     verts = np.matmul(np.concatenate([verts, np.ones_like(verts[:,:1])],1), inv(calib_world).T)[:,:3]
@@ -83,7 +88,9 @@ def gen_mesh(res, net, cuda, data, save_path, thresh=0.5, use_octree=True, compo
         nml = net.nmls.detach().cpu().numpy()[0] * 0.5 + 0.5
         color[left:right] = nml.T
 
+    print("****12****")
     save_obj_mesh_with_color(save_path, verts, faces, color)
+    print("****13****")
     #except Exception as e:
     #    print(e)
 
